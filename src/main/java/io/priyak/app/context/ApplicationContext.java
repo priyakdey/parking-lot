@@ -6,6 +6,7 @@ import com.google.inject.Module;
 import io.priyak.app.context.config.AvailableSpotStrategyModule;
 import io.priyak.app.context.config.ParkingLotModule;
 import io.priyak.app.context.config.ParkingServiceModule;
+import io.priyak.app.context.config.PricingStrategyModule;
 import io.priyak.app.core.service.ParkingService;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class ApplicationContext {
     public ParkingService getController(int numberOfSpots) {
         final List<Module> configurationModules = List.of(new ParkingServiceModule(),
                                                           new AvailableSpotStrategyModule(),
+                                                          new PricingStrategyModule(),
                                                           new ParkingLotModule(numberOfSpots));
         final Injector injector = Guice.createInjector(configurationModules);
         final ParkingService parkingService = injector.getInstance(ParkingService.class);

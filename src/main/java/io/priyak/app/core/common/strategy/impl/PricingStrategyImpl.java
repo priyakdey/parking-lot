@@ -6,6 +6,11 @@ public class PricingStrategyImpl implements PricingStrategy {
 
     @Override
     public Integer charges(Number numberOfHours) {
-        return null;
+        final int baseCharge = 10;
+        final int perHourCharge = 10;
+
+        return (int) numberOfHours > 2 ?
+                ((int )numberOfHours - 2) * perHourCharge + baseCharge :
+                baseCharge;
     }
 }

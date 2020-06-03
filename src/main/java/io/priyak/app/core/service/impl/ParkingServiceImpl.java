@@ -1,16 +1,19 @@
 package io.priyak.app.core.service.impl;
 
 import io.priyak.app.core.common.strategy.AvailableSpotStrategy;
+import io.priyak.app.core.common.strategy.PricingStrategy;
 import io.priyak.app.core.domain.ParkingLot;
 import io.priyak.app.core.domain.spot.Spot;
 import io.priyak.app.core.domain.vehicle.GeneralVehicle;
 import io.priyak.app.core.domain.vehicle.Vehicle;
 import io.priyak.app.core.exception.NoParkingAvailableException;
+import io.priyak.app.core.exception.NoVehicleFoundException;
 import io.priyak.app.core.service.ParkingService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Simple impl for @{@link ParkingService}
@@ -22,11 +25,15 @@ import java.util.List;
 public class ParkingServiceImpl implements ParkingService {
     private final ParkingLot parkingLot;
     private final AvailableSpotStrategy availableSpotStrategy;
+    private final PricingStrategy pricingStrategy;
 
     @Inject
-    public ParkingServiceImpl(ParkingLot parkingLot, AvailableSpotStrategy availableSpotStrategy) {
+    public ParkingServiceImpl(ParkingLot parkingLot,
+                              AvailableSpotStrategy availableSpotStrategy,
+                              PricingStrategy pricingStrategy) {
         this.parkingLot = parkingLot;
         this.availableSpotStrategy = availableSpotStrategy;
+        this.pricingStrategy = pricingStrategy;
     }
 
     @Override
@@ -66,7 +73,31 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public String leave(String registrationNumber, int hoursParked) {
-        return null;
+        final String errorMessage = String.format("Registration number %s not found", registrationNumber);
+
+        // Find the parked spot or else throw exception
+        Spot parkedSpot = parkingLot.getSpots()
+                                     .stream()
+                                     .filter(Spot::isOccupied)
+                                     .filter(spot -> Objects.equals(spot.getParkedVehicle().getRegistrationNumber(),
+                                                                    registrationNumber))
+                                     .findFirst()
+                                     .orElseThrow(() -> new NoVehicleFoundException(errorMessage));
+
+        // Set occupied and vehicle to default value
+        parkedSpot.setOccupied(false);
+        parkedSpot.setParkedVehicle(null);
+
+        // Set Flags
+        parkingLot.setEmpty(isParkingLotEmpty());
+        parkingLot.setFull(isParkingLotFull());
+
+        // Find parking charges
+        Integer charges = (Integer) pricingStrategy.charges(hoursParked);
+
+        final String returnMessage = String.format("Registration number %s with Slot Number %s is free with Charge %s",
+                registrationNumber, parkedSpot.getSpotNumber(), charges);
+        return returnMessage;
     }
 
     @Override

@@ -3,15 +3,20 @@ package io.priyak.app.core.service.impl;
 import io.priyak.app.core.common.factory.GeneralParkingSpotFactory;
 import io.priyak.app.core.common.factory.ParkingSpotFactory;
 import io.priyak.app.core.common.strategy.AvailableSpotStrategy;
+import io.priyak.app.core.common.strategy.PricingStrategy;
 import io.priyak.app.core.common.strategy.impl.NearestAvailableSpotStrategyImpl;
+import io.priyak.app.core.common.strategy.impl.PricingStrategyImpl;
 import io.priyak.app.core.domain.ParkingLot;
+import io.priyak.app.core.domain.spot.Spot;
 import io.priyak.app.core.domain.vehicle.GeneralVehicle;
 import io.priyak.app.core.exception.NoParkingAvailableException;
+import io.priyak.app.core.exception.NoVehicleFoundException;
 import io.priyak.app.core.service.ParkingService;
 import org.junit.jupiter.api.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +38,8 @@ class ParkingServiceImplTest {
             this.parkingLot = constructor.newInstance(factory, numberOfSpots);
 
             final AvailableSpotStrategy emptySpotStrategy = new NearestAvailableSpotStrategyImpl();
-            this.parkingService = new ParkingServiceImpl(parkingLot, emptySpotStrategy);
+            final PricingStrategy pricingStrategy = new PricingStrategyImpl();
+            this.parkingService = new ParkingServiceImpl(parkingLot, emptySpotStrategy, pricingStrategy);
         }
 
         @Test
@@ -95,16 +101,113 @@ class ParkingServiceImplTest {
         }
     }
 
+    @Nested
+    @DisplayName("Leave() Method Test Suite")
+    class Leave {
+        ParkingService parkingService;
+        ParkingLot parkingLot;
 
-    @Test
-    @Disabled
-    void leave() {
-        fail("To be implemented");
+        @BeforeEach
+        void setUp() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+            final ParkingSpotFactory factory = new GeneralParkingSpotFactory();
+            final int numberOfSpots = 3;
+            final Constructor<ParkingLot> constructor =
+                    ParkingLot.class.getDeclaredConstructor(ParkingSpotFactory.class, int.class);
+            constructor.setAccessible(true);
+            this.parkingLot = constructor.newInstance(factory, numberOfSpots);
+
+            final AvailableSpotStrategy emptySpotStrategy = new NearestAvailableSpotStrategyImpl();
+            final PricingStrategy pricingStrategy = new PricingStrategyImpl();
+            this.parkingService = new ParkingServiceImpl(parkingLot, emptySpotStrategy, pricingStrategy);
+        }
+
+        @Test
+        @DisplayName("should free up spot 1")
+        void leaveScenario1() {
+            parkingService.park("MH-12-FB-6636");
+            parkingService.park("MH-02-AZ-6636");
+            parkingService.park("MH-12-FB-6754");
+
+            final String actual = parkingService.leave("MH-12-FB-6636", 2);
+            final String expected = "Registration number MH-12-FB-6636 with Slot Number 1 is free with Charge 10";
+
+            assertAll(
+                    () -> assertEquals(expected, actual),
+                    () -> assertFalse(parkingLot.getSpots().get(0).isOccupied()),
+                    () -> assertFalse(parkingLot.isEmpty()),
+                    () -> assertFalse(parkingLot.isFull())
+            );
+        }
+
+        @Test
+        @DisplayName("should throw NoVehicleFoundException")
+        void leaveScenario2() {
+            parkingService.park("MH-12-FB-6636");
+            parkingService.park("MH-02-AZ-6636");
+            parkingService.park("MH-12-FB-6754");
+
+            assertAll(
+                    () -> assertThrows(NoVehicleFoundException.class,
+                            () -> parkingService.leave("MH-12-FB-0000", 2)),
+                    () -> assertFalse(parkingLot.isEmpty()),
+                    () -> assertTrue(parkingLot.isFull())
+            );
+        }
+
+        @Test
+        @DisplayName("should be empty now")
+        void leaveScenario3() {
+            parkingService.park("MH-12-FB-6636");
+            parkingService.park("MH-02-AZ-6636");
+            parkingService.park("MH-12-FB-6754");
+
+            parkingService.leave("MH-12-FB-6636", 2);
+            parkingService.leave("MH-02-AZ-6636", 2);
+            parkingService.leave("MH-12-FB-6754", 2);
+
+            assertAll(
+                    () -> assertTrue(parkingLot.isEmpty()),
+                    () -> assertFalse(parkingLot.isFull())
+            );
+        }
     }
 
-    @Test
-    @Disabled
-    void status() {
-        fail("To be implemented");
+    @Nested
+    @DisplayName("status() method test suite")
+    class Status {
+        ParkingService parkingService;
+        ParkingLot parkingLot;
+
+        @BeforeEach
+        void setUp() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+            final ParkingSpotFactory factory = new GeneralParkingSpotFactory();
+            final int numberOfSpots = 3;
+            final Constructor<ParkingLot> constructor =
+                    ParkingLot.class.getDeclaredConstructor(ParkingSpotFactory.class, int.class);
+            constructor.setAccessible(true);
+            this.parkingLot = constructor.newInstance(factory, numberOfSpots);
+
+            final AvailableSpotStrategy emptySpotStrategy = new NearestAvailableSpotStrategyImpl();
+            final PricingStrategy pricingStrategy = new PricingStrategyImpl();
+            this.parkingService = new ParkingServiceImpl(parkingLot, emptySpotStrategy, pricingStrategy);
+        }
+
+        @Test
+        @DisplayName("should return a new object")
+        void statusScenario1() {
+            final List<? extends Spot> clone = parkingService.status();
+            final List<? extends Spot> original = parkingLot.getSpots();
+
+            assertNotEquals(original.hashCode(), clone.hashCode());
+        }
+
+        @Test
+        @DisplayName("should return current state of the parking lot")
+        void statusScenario2() {
+            final List<? extends Spot> actual = parkingService.status();
+            final List<? extends Spot> expected = parkingLot.getSpots();
+
+            // TODO: To be done
+        }
     }
 }
