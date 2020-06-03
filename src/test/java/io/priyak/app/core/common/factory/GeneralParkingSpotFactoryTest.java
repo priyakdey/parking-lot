@@ -1,4 +1,4 @@
-package io.priyak.app.core.domain.common.factory;
+package io.priyak.app.core.common.factory;
 
 import io.priyak.app.core.domain.spot.Spot;
 import org.junit.jupiter.api.DisplayName;

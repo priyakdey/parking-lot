@@ -20,6 +20,7 @@ public abstract class Vehicle {
         return registrationNumber;
     }
 
+    @SuppressWarnings("unused")
     public VehicleType getType() {
         return type;
     }

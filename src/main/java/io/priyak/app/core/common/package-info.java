@@ -3,4 +3,4 @@
  *
  * @author priyakdey
  */
-package io.priyak.app.core.domain.common;
+package io.priyak.app.core.common;

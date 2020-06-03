@@ -5,6 +5,7 @@ package io.priyak.app.core.domain.spot;
  *
  * @author priyakdey
  */
+@SuppressWarnings("unused")
 public enum ParkingType {
     GENERAL, HANDICAPPED, RESERVED
 }

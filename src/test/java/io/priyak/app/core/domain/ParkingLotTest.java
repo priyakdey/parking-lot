@@ -1,7 +1,7 @@
 package io.priyak.app.core.domain;
 
-import io.priyak.app.core.domain.common.factory.GeneralParkingSpotFactory;
-import io.priyak.app.core.domain.common.factory.ParkingSpotFactory;
+import io.priyak.app.core.common.factory.GeneralParkingSpotFactory;
+import io.priyak.app.core.common.factory.ParkingSpotFactory;
 import io.priyak.app.core.domain.spot.Spot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

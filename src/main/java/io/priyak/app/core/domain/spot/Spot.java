@@ -40,6 +40,7 @@ public abstract class Spot {
         this.parkedVehicle = parkedVehicle;
     }
 
+    @SuppressWarnings("unused")
     public ParkingType getType() {
         return type;
     }

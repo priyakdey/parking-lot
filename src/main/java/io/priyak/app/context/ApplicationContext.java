@@ -2,8 +2,13 @@ package io.priyak.app.context;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
+import io.priyak.app.context.config.AvailableSpotStrategyModule;
 import io.priyak.app.context.config.ParkingLotModule;
-import io.priyak.app.core.domain.ParkingLot;
+import io.priyak.app.context.config.ParkingServiceModule;
+import io.priyak.app.core.service.ParkingService;
+
+import java.util.List;
 
 /**
  * Context to wire up all components of the application
@@ -13,10 +18,13 @@ import io.priyak.app.core.domain.ParkingLot;
 public class ApplicationContext {
 
     // TODO: Method def and implementation to be changed.
-    public ParkingLot getController(int numberOfSpots) {
-        final Injector injector = Guice.createInjector(new ParkingLotModule(numberOfSpots));
-        final ParkingLot parkingLot = injector.getInstance(ParkingLot.class);
-        return parkingLot;
+    public ParkingService getController(int numberOfSpots) {
+        final List<Module> configurationModules = List.of(new ParkingServiceModule(),
+                                                          new AvailableSpotStrategyModule(),
+                                                          new ParkingLotModule(numberOfSpots));
+        final Injector injector = Guice.createInjector(configurationModules);
+        final ParkingService parkingService = injector.getInstance(ParkingService.class);
+        return parkingService;
     }
 
 }
