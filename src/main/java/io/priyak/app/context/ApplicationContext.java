@@ -24,6 +24,7 @@ public class ApplicationContext {
                                                           new AvailableSpotStrategyModule(),
                                                           new PricingStrategyModule(),
                                                           new ParkingLotModule(numberOfSpots));
+
         final Injector injector = Guice.createInjector(configurationModules);
         final ParkingService parkingService = injector.getInstance(ParkingService.class);
         return parkingService;

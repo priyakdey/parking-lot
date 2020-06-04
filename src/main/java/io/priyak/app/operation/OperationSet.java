@@ -8,4 +8,9 @@ public abstract class OperationSet {
     OperationSet(Queue<String> queue) {
         this.queue = queue;
     }
+    
+    public String[] take() {
+        final String instruction = queue.poll();
+        return instruction.split(" ");
+    }
 }

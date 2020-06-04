@@ -117,6 +117,8 @@
                                 <exclude>io/priyak/app/core/domain/spot/**</exclude>
                                 <exclude>io/priyak/app/core/domain/vehicle/**</exclude>
                                 <exclude>io/priyak/app/context/config/**</exclude>
+                                <exclude>io/priyak/app/file/**</exclude>
+                                <exclude>io/priyak/app/operation/**</exclude>
                                 <exclude>io/priyak/app/Main.class</exclude>
                             </excludes>
                         </configuration>
@@ -151,6 +153,8 @@
                                 <exclude>io/priyak/app/core/domain/spot/**</exclude>
                                 <exclude>io/priyak/app/core/domain/vehicle/**</exclude>
                                 <exclude>io/priyak/app/context/config/**</exclude>
+                                <exclude>io/priyak/app/file/**</exclude>
+                                <exclude>io/priyak/app/operation/**</exclude>
                                 <exclude>io/priyak/app/Main.class</exclude>
                             </excludes>
                         </configuration>

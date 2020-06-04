@@ -1,5 +1,7 @@
 package io.priyak.app.processor;
 
+import io.priyak.app.operation.OperationSet;
+
 /**
  * Common interface to define the processing of input
  *
@@ -7,6 +9,6 @@ package io.priyak.app.processor;
  */
 public interface RequestProcessor {
 
-    void process() throws Exception;
+    OperationSet process() throws Exception;
 
 }
