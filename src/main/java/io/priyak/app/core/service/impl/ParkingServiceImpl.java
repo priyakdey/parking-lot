@@ -12,8 +12,10 @@ import io.priyak.app.core.service.ParkingService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Simple impl for @{@link ParkingService}
@@ -102,7 +104,15 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public List<? extends Spot> status() {
-        return null;
+        if (parkingLot.isEmpty()) {
+            return new ArrayList<>();
+        }
+        final List<? extends Spot> spots = parkingLot.getSpots()
+                                                    .stream()
+                                                    .filter(Spot::isOccupied)
+                                                    .collect(Collectors.toList());
+
+        return new ArrayList<>(spots);
     }
 
 }

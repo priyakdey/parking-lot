@@ -12,7 +12,10 @@ import io.priyak.app.core.domain.vehicle.GeneralVehicle;
 import io.priyak.app.core.exception.NoParkingAvailableException;
 import io.priyak.app.core.exception.NoVehicleFoundException;
 import io.priyak.app.core.service.ParkingService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -193,21 +196,33 @@ class ParkingServiceImplTest {
         }
 
         @Test
-        @DisplayName("should return a new object")
+        @DisplayName("should return current state of the parking lot")
         void statusScenario1() {
-            final List<? extends Spot> clone = parkingService.status();
-            final List<? extends Spot> original = parkingLot.getSpots();
+            parkingService.park("MH-12-FB-6636");
+            parkingService.park("WB-12-FB-6636");
+            parkingService.park("MH-14-GA-4567");
 
-            assertNotEquals(original.hashCode(), clone.hashCode());
+            parkingService.leave("WB-12-FB-6636", 2);
+
+            final List<? extends Spot> spots = parkingService.status();
+
+            assertAll(
+                    () -> assertEquals(2, spots.size()),
+                    () -> assertTrue(spots.get(0).isOccupied()),
+                    () -> assertEquals(1, spots.get(0).getSpotNumber()),
+                    () -> assertEquals("MH-12-FB-6636", spots.get(0).getParkedVehicle().getRegistrationNumber()),
+                    () -> assertTrue(spots.get(1).isOccupied()),
+                    () -> assertEquals(3, spots.get(1).getSpotNumber()),
+                    () -> assertEquals("MH-14-GA-4567", spots.get(1).getParkedVehicle().getRegistrationNumber())
+            );
         }
 
         @Test
-        @DisplayName("should return current state of the parking lot")
+        @DisplayName("should return an empty list")
         void statusScenario2() {
-            final List<? extends Spot> actual = parkingService.status();
-            final List<? extends Spot> expected = parkingLot.getSpots();
+            final List<? extends Spot> spots = parkingService.status();
 
-            // TODO: To be done
+            assertEquals(0, spots.size());
         }
     }
 }
