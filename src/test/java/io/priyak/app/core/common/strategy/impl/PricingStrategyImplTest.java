@@ -8,13 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Pricing Strategy Impl Test")
 class PricingStrategyImplTest {
-    PricingStrategy pricingStrategy = new PricingStrategyImpl();
+    final PricingStrategy pricingStrategy = new PricingStrategyImpl();
 
     @Test
     @DisplayName("should return 10")
     void chargesScenario1() {
         final Number actual = pricingStrategy.charges(1);
-        final Number expected = Integer.valueOf(10);
+        final Number expected = 10;
 
         assertEquals(expected, actual);
     }
@@ -23,7 +23,7 @@ class PricingStrategyImplTest {
     @DisplayName("should return 10")
     void chargesScenario2() {
         final Number actual = pricingStrategy.charges(2);
-        final Number expected = Integer.valueOf(10);
+        final Number expected = 10;
 
         assertEquals(expected, actual);
     }
@@ -32,7 +32,7 @@ class PricingStrategyImplTest {
     @DisplayName("should return 50")
     void chargesScenario3() {
         final Number actual = pricingStrategy.charges(6);
-        final Number expected = Integer.valueOf(50);
+        final Number expected = 50;
 
         assertEquals(expected, actual);
     }

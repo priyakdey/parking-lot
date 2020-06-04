@@ -107,12 +107,10 @@ public class ParkingServiceImpl implements ParkingService {
         if (parkingLot.isEmpty()) {
             return new ArrayList<>();
         }
-        final List<? extends Spot> spots = parkingLot.getSpots()
-                                                    .stream()
-                                                    .filter(Spot::isOccupied)
-                                                    .collect(Collectors.toList());
 
-        return new ArrayList<>(spots);
+        return parkingLot.getSpots()
+                .stream()
+                .filter(Spot::isOccupied).collect(Collectors.toList());
     }
 
 }
