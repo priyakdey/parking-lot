@@ -11,6 +11,6 @@ public abstract class OperationSet {
     
     public String[] take() {
         final String instruction = queue.poll();
-        return instruction.split(" ");
+        return instruction != null ? instruction.split(" ") : null;
     }
 }

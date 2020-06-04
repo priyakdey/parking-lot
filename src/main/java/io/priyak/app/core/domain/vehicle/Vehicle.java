@@ -7,6 +7,7 @@ package io.priyak.app.core.domain.vehicle;
  *
  * @author priyakdey
  */
+@SuppressWarnings("SameParameterValue")
 public abstract class Vehicle {
     private final String registrationNumber;
     private final VehicleType type;

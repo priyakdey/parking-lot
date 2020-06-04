@@ -9,6 +9,7 @@ import io.priyak.app.core.domain.vehicle.Vehicle;
  *
  * @author priyakdey
  */
+@SuppressWarnings("SameParameterValue")
 public abstract class Spot {
     private final int spotNumber;
     private final ParkingType type;

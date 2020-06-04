@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
  *
  * @author priyakdey
  */
+@SuppressWarnings("UnnecessaryLocalVariable")
 @Singleton
 public class ParkingServiceImpl implements ParkingService {
     private final ParkingLot parkingLot;

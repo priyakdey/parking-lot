@@ -19,7 +19,7 @@ public class FileProcessor implements RequestProcessor {
     private static final String INVALID_FILE = "Please enter a valid non-empty file";
     private static final String INVALID_OPERATION=
             "First operation should be create_parking_lot. Valid instructions are: create_parking_lot, park, leave, status";
-    private File file;
+    private final File file;
 
 
     public FileProcessor(File file) {

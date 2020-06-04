@@ -9,7 +9,7 @@ import java.util.Queue;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TxtParserTest {
-    Parser parser = new TxtParser();
+    final Parser parser = new TxtParser();
 
     @Test
     void parse() throws IOException {

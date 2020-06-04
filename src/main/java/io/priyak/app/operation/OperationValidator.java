@@ -9,12 +9,14 @@ public class OperationValidator {
     /* Class cannot be instantiated */
     private OperationValidator() {}
 
+    @SuppressWarnings("ConstantConditions")
     public static boolean validateOperationSet(Queue<String> queue) {
         boolean validFirstOperation = validateFirstOperation(queue.peek());
         boolean validOperations = validateOperations(queue);
         return validFirstOperation && validOperations;
     }
 
+    @SuppressWarnings("ConstantConditions")
     private static boolean validateOperations(Queue<String> queue) {
         int createCount = 0;
         for (String instr : queue) {
@@ -23,7 +25,6 @@ public class OperationValidator {
             if (Objects.equals(arr[0], CREATE.getOperation()) && arr.length == 2) {
                 if (createCount == 0) {
                     createCount ++;
-                    continue;
                 } else {
                     return false;
                 }
