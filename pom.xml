@@ -131,7 +131,7 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
-                            <haltOnFailure>false</haltOnFailure>    <!-- To be updated to true -->
+                            <haltOnFailure>true</haltOnFailure>    <!-- To be updated to true -->
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>

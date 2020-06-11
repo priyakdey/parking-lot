@@ -23,7 +23,7 @@ public class Main {
         System.out.println("###########################################");
 
         if (args != null) {
-            processFile(args[1]);
+            processFile(args[0]);
         }
     }
 
